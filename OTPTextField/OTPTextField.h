@@ -31,6 +31,11 @@ IB_DESIGNABLE
 @property (nonatomic) IBInspectable UIColor * placeholderColor;
 
 /*
+    @abstract Placeholder color when input active. Default nil.
+ */
+@property (nonatomic) IBInspectable UIColor * placeholderActiveColor;
+
+/*
     @abstract Letter spacing. Default 30.
  */
 @property (nonatomic) IBInspectable CGFloat spacing;

@@ -54,6 +54,7 @@
     self.delegate = self;
     self.placeholderSeparator = @"-";
     self.placeholderColor = [UIColor grayColor];
+    self.placeholderActiveColor = nil;
     self.spacing = 30.0;
     __textColor = [UIColor blackColor];
     self.keyboardType = UIKeyboardTypeNumberPad;
@@ -117,6 +118,9 @@
     NSDictionary *spacingAttributes = @{NSKernAttributeName: [NSNumber numberWithInt:_spacing]};
     
     NSDictionary *textAttributes = @{NSForegroundColorAttributeName: __textColor};
+    NSDictionary *activePlaceholderAttributes = _placeholderActiveColor
+    ? @{NSForegroundColorAttributeName: _placeholderActiveColor}
+    : nil;
     NSDictionary *placeholderAttributes = @{NSForegroundColorAttributeName: _placeholderColor};
     
     NSMutableAttributedString *formattedText = [NSMutableAttributedString new];
@@ -127,12 +131,23 @@
     for (int i=0; i<(_count - self.text.length); i++) {
         [placeholderArray addObject:_placeholderSeparator];
     }
+    
     [formattedText appendAttributedString:[[NSAttributedString alloc] initWithString:[placeholderArray componentsJoinedByString:@""]
                                                                           attributes:placeholderAttributes]];
     [formattedText addAttributes:defaultAttributes range:NSMakeRange(0, _count)];
     if (_count > 1) {
         [formattedText addAttributes:spacingAttributes range:NSMakeRange(0, _count-1)];
     }
+    
+    NSInteger activeIndex = self.text.length >= _count
+    ? -1
+    : self.text.length;
+    
+    if (activePlaceholderAttributes
+        && activeIndex > -1) {
+        [formattedText addAttributes:activePlaceholderAttributes range:NSMakeRange(activeIndex, 1)];
+    }
+    
     placeholderLabel.attributedText = formattedText;
 }
 
